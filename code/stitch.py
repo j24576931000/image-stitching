@@ -4,7 +4,7 @@ from scipy import ndimage
 import math
 
 
-def RANSAC(matching,img,img2):
+def RANSAC(matching):
     # P=0.99
     # p=0.8
     # n=1
@@ -27,7 +27,7 @@ def RANSAC(matching,img,img2):
             diff_total=0
             diff= math.sqrt((matching[d][3]-m1-matching[d][1])**2+(matching[d][4]-m2-matching[d][2])**2)
             diff_total=diff_total+diff
-            print( diff_total)
+            #print( diff_total)
             if diff_total < threshold_distance:
                 inliner = inliner + 1
 
@@ -42,33 +42,36 @@ def RANSAC(matching,img,img2):
 def stitching(best_shift,img,img2):
 
     h, w = img2.shape[:2]
+
     print(best_shift)
     
-    shifte_img=cv2.warpAffine(img,best_shift,dsize=(w+int(best_shift[0][2]), h+int(best_shift[1][2])),borderValue=(0, 0, 0))
+    shifte_img=cv2.warpAffine(img,best_shift,dsize=(img.shape[1]+int(best_shift[0][2]), img.shape[0]+int(best_shift[1][2])),borderValue=(0, 0, 0))
     cv2.imwrite('pre_shift_image.jpg', shifte_img)
+
     print(shifte_img.shape)
     print(img.shape)
     print(img2.shape)
     pre_shift = np.copy(shifte_img)
     #new_img2,max=blending(shifte_img,img2,int(best_shift[0][2]),w)
-    new_img2=img2
+
+    
     for i in range(0,h):
         for j in range(0,w):
                 if shifte_img[i][j][0] == 0 and shifte_img[i][j][1] == 0 and shifte_img[i][j][2] == 0 :
-                    shifte_img[i][j][0] = new_img2 [i][j][0]
-                    shifte_img[i][j][1] = new_img2 [i][j][1]
-                    shifte_img[i][j][2] = new_img2 [i][j][2]
+                    shifte_img[i][j][0] = img2 [i][j][0]
+                    shifte_img[i][j][1] = img2 [i][j][1]
+                    shifte_img[i][j][2] = img2 [i][j][2]
 
-    new_img2=blending(pre_shift,img2,int(best_shift[0][2]),w,shifte_img)
+    result = blending(pre_shift,img2,int(best_shift[0][2]),w,shifte_img)
 
-    cv2.imshow('img', img)
-    cv2.imshow('image2', new_img2)
-    cv2.imshow('shift_image', shifte_img)
-    cv2.imwrite('shift_image.jpg', shifte_img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow('img', img)
+    # cv2.imshow('image2', img2)
+    # cv2.imshow('shift_image', result)
+    cv2.imwrite('shift_image.jpg', result)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
-    return 0
+    return result
 
 
 
@@ -76,28 +79,15 @@ def blending(img1,img2,shift,img2_w,concat_img):
 
     h, w = img2.shape[:2]
 
-    constant=65
+    constant=(img2_w - shift)/2
     center=(img2_w-shift)/2+shift
     print(img2_w - shift)
-    # print(int(center+constant))
-
-    # print(h)
-    # print(w)
-
     a = 1/(center+constant - (center-constant)) 
     b = 0-a*(center-constant)
-    print(concat_img.shape)
-    print(img1.shape)
-    print(img2.shape)
+
     # a = 1/(img2_w - shift) 
     # b = 0-a*shift
-    # alpha=a*(center-constant)+b
-    # print(alpha)
-    # alpha=a*(center+constant)+b
-    # print(alpha)
-    # alpha=a*(center)+b
-    # print(alpha)
-    #img1[center,center+constant:]
+
     for i in range(0,h):
         for j in range(int(center-constant),int(center+constant)):
             for k in range(0,3):
@@ -105,5 +95,62 @@ def blending(img1,img2,shift,img2_w,concat_img):
                 concat_img[i][j][k]=img1[i][j][k]*(alpha)+img2[i][j][k]*(1-alpha)
                 #img2[i][j][k]=img2[i][j][k]
 
+    return concat_img
 
-    return img2
+
+
+def end2end_align(img,y_shifts ,y_shift_array,x_shift_array):
+
+    avg_y_shift=np.linspace(y_shifts,0,num =img.shape[1])
+
+    print(img.shape[1])
+    print(avg_y_shift)
+    print(x_shift_array)
+    align_img = np.copy(img)
+    for x in range(img.shape[1]):
+        #align_img[:,x] = img[:,x]
+        align_img[:,x] = np.roll(img[:,x], int(avg_y_shift[x]), axis=0)
+    # total_x_shifts = 0
+    # total_y_shifts = 0
+    # for i in range(len(x_shift_array)-1,-1,-1):
+    #     #for i in range(x_shift_array,img.shape[1]):
+            
+    #         if i == len(x_shift_array)-1:
+    #             align_img[:,0:x_shift_array[i]] = np.roll(img[:,0:x_shift_array[i]], y_shifts, axis=0)
+    #             total_x_shifts = total_x_shifts+x_shift_array[i]
+                
+    #             print(x_shift_array[i])
+    #             print(total_x_shifts)
+    #         else:
+    #             align_img[:,total_x_shifts:total_x_shifts+x_shift_array[i]] = np.roll(img[:,total_x_shifts:total_x_shifts+x_shift_array[i]], y_shifts, axis=0)
+    #             total_x_shifts = total_x_shifts+x_shift_array[i]
+                
+    #             print(x_shift_array[i])
+    #             print(total_x_shifts)
+
+    # align_img[:,total_x_shifts:img.shape[1]] = np.roll(img[:,total_x_shifts:img.shape[1]], y_shifts, axis=0)
+
+    return align_img
+
+
+
+# def crop(img):
+#     _,thresh = cv2.threshold(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 1, 255, cv2.THRESH_BINARY)
+#     print(thresh)
+#     top = -1
+#     down =-1
+
+#     threshold = img.shape[1]//100
+#     print(img.shape[0])
+#     for y in range(thresh.shape[0]):
+#         if len(np.where(thresh[y] == 0)[0]) < threshold:
+#             top = y
+#             break
+        
+#     for y in range(thresh.shape[0]-1, -1, -1):
+#         if len(np.where(thresh[y] == 0)[0]) < threshold:
+#             down = y
+#             break
+#     print(top)
+#     print(down)
+#     return img[58:img.shape[0]-60, :]

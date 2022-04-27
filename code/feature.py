@@ -3,7 +3,7 @@ import numpy as np
 from scipy import ndimage
 import math
 def Harris_corner_detector(img):
-    cv2.imshow('Image', img)
+    #cv2.imshow('Image', img)
     img_tmp=np.copy(img)
     w=img.shape[0]
     h=img.shape[1]
@@ -40,6 +40,9 @@ def Harris_corner_detector(img):
     result = np.where(filter_corner_response == corner_response, corner_response, 0)
     #np.save('my_array.npy', result)
     print(np.max(result))
+
+    # if result[:,:]<1000 or i+20>w or i-20<0 or j+20>h or j-20<0:
+    #             result[:,:]=0
     for i in range(0,w):
         for j in range(0,h):
             if result[i][j]<1000 or i+20>w or i-20<0 or j+20>h or j-20<0:
@@ -51,12 +54,12 @@ def Harris_corner_detector(img):
                 image = cv2.circle(img_tmp, (j,i), 2, (255, 0, 0), 2) 
                 
 
-    #cv2.imwrite('circle_image.jpg', image) 
-    cv2.imshow('corner_response Image', corner_response)
-    cv2.imshow('result', result)
-    cv2.imshow('circle_image', image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    cv2.imwrite('feature.jpg', image)
+    # cv2.imshow('corner_response Image', corner_response)
+    # cv2.imshow('result', result)
+    # cv2.imshow('circle_image', image)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
     return result
 
 
@@ -119,21 +122,21 @@ def matching(desc1,desc2):
                 match_i=i
                 match_j=j
         if now_match!=3 :
-            #matching.append([match_i,match_j,now_match])
-            if match_j in tmp_match_j  :
-                Index = tmp_match_j.index(match_j,0,len(tmp_match_j)-1)
-                if now_match < tmp_match_var[Index]:
-                    tmp_match_var[Index] = now_match
-                    tmp_match_i[Index] = match_i
-            else :
-                tmp_match_j.append(match_j)
-                tmp_match_i.append(match_i)
-                tmp_match_var.append(now_match)
+            matching.append([match_i,match_j,now_match])
+            # if match_j in tmp_match_j  :
+            #     Index = tmp_match_j.index(match_j,0,len(tmp_match_j)-1)
+            #     if now_match < tmp_match_var[Index]:
+            #         tmp_match_var[Index] = now_match
+            #         tmp_match_i[Index] = match_i
+            # else :
+            #     tmp_match_j.append(match_j)
+            #     tmp_match_i.append(match_i)
+            #     tmp_match_var.append(now_match)
 
 
                 #Min=np.argmin(np.array(tmp_match_var))
-    for i in range(len(tmp_match_var)):    
-        matching.append([tmp_match_i[i],tmp_match_j[i],tmp_match_var[i]])
+    # for i in range(len(tmp_match_var)):    
+    #     matching.append([tmp_match_i[i],tmp_match_j[i],tmp_match_var[i]])
     
     return matching
 
