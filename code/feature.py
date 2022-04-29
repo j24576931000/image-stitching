@@ -4,6 +4,7 @@ from scipy import ndimage
 import math
 def Harris_corner_detector(img):
     #cv2.imshow('Image', img)
+    print("......Harris_corner_detector......")
     img_tmp=np.copy(img)
     w=img.shape[0]
     h=img.shape[1]
@@ -36,7 +37,7 @@ def Harris_corner_detector(img):
             else:
                 corner_response[i][j]=np.linalg.det(array)/np.trace(array)
     print(np.max(corner_response))
-    filter_corner_response=ndimage.maximum_filter(corner_response, size=(10,10) )
+    filter_corner_response=ndimage.maximum_filter(corner_response, size=(20,20) )
     result = np.where(filter_corner_response == corner_response, corner_response, 0)
     #np.save('my_array.npy', result)
     print(np.max(result))
@@ -64,6 +65,7 @@ def Harris_corner_detector(img):
 
 
 def description(img,result):
+    print("......description......")
     descriptor = []
     feature_positions = []
     img_tmp=np.copy(img)
@@ -109,6 +111,7 @@ def matrix_cula(image_rotate,i,j):
 
 def matching(desc1,desc2):
 
+    print("......matching......")
     matching=[]
     tmp_match_j=[]
     tmp_match_i=[]

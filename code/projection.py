@@ -10,7 +10,7 @@ def projection(img, focal_len):
     height, width, RGB = img.shape
     projection_result =  np.zeros(shape=img.shape, dtype=np.uint8)
 
-    s = focal_len
+    print("......projection......")
 
     for x in range(0, width):
         for y in range(0, height):
@@ -24,9 +24,8 @@ def projection(img, focal_len):
 
             if (new_x >= 0) & (new_x < width) & (new_y >= 0) & (new_y < height):
                 projection_result[new_y][new_x] = img[y][x]
-
+    cv2.imwrite("projection_result.jpg",projection_result)
     _, thresh = cv2.threshold(cv2.cvtColor(projection_result, cv2.COLOR_BGR2GRAY), 1, 255, cv2.THRESH_BINARY)
     x, y, w, h = cv2.boundingRect(thresh)
-
 
     return projection_result[y:y+h,x:x+w]

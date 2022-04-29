@@ -34,9 +34,9 @@ if __name__=='__main__':
             data_img = cv2.imread(os.path.join('data/data',oper_img1))#讀取圖片
             data_img=cv2.resize(data_img,(data_img.shape[1]//10,data_img.shape[0]//10), interpolation=cv2.INTER_AREA)
             cv2.imwrite('resize.jpg', data_img)
-            data_img = projection.projection(data_img,focallength[i])
-            #data_img = stitch.crop(data_img)
+            data_img = projection.projection(data_img,focallength[i])    
             cv2.imwrite('projection.jpg', data_img)
+            data_img = stitch.crop(data_img)
         else :
             data_img = oper_img1
         result=feature.Harris_corner_detector(data_img)  
@@ -47,12 +47,14 @@ if __name__=='__main__':
         cv2.imwrite('resize.jpg', data_img2)
         if i > 1 :
             data_img2 = projection.projection(data_img2,focallength[i])
-            #data_img2 = stitch.crop(data_img2)
             cv2.imwrite('projection.jpg', data_img2)
+            data_img2 = stitch.crop(data_img2)  
+            cv2.imwrite('crop.jpg', data_img2) 
         else:
            data_img2 = projection.projection(data_img2,focallength[i+1])
-           #data_img2 = stitch.crop(data_img2)
            cv2.imwrite('projection.jpg', data_img2)
+           data_img2 = stitch.crop(data_img2)   
+           cv2.imwrite('crop.jpg', data_img2)  
         result2=feature.Harris_corner_detector(data_img2)  
         desc2,pos2=feature.description(data_img2,result2)
 
@@ -71,9 +73,9 @@ if __name__=='__main__':
 
         feature_matrix=[]
         for i in range(len(match)):
-            #image = cv2.circle(data_img, (tmp1[match[i][0]][1],tmp1[match[i][0]][0]), 2, (255, 0, 0), 2) 
-            #image2 = cv2.circle(data_img2, (tmp2[match[i][1]][1],tmp2[match[i][1]][0]), 2, (255, 0, 0), 2)     
-            #mark_result = cv2.line(concat, (tmp1[match[i][0]][1], tmp1[match[i][0]][0]), ((data_img.shape[1])+tmp2[match[i][1]][1], tmp2[match[i][1]][0]), (0, 0, 255), 1)
+            # image = cv2.circle(concat, (tmp1[match[i][0]][1],tmp1[match[i][0]][0]), 2, (255, 0, 0), 2) 
+            # image2 = cv2.circle(concat, ((data_img.shape[1])+tmp2[match[i][1]][1],tmp2[match[i][1]][0]), 2, (255, 0, 0), 2)     
+            # mark_result = cv2.line(concat, (tmp1[match[i][0]][1], tmp1[match[i][0]][0]), ((data_img.shape[1])+tmp2[match[i][1]][1], tmp2[match[i][1]][0]), (0, 0, 255), 1)
             feature_matrix.append([i,tmp1[match[i][0]][0],tmp1[match[i][0]][1],tmp2[match[i][1]][0],tmp2[match[i][1]][1]])
         
         #print(feature_matrix)
@@ -92,19 +94,19 @@ if __name__=='__main__':
         oper_img1 = result
 
         # cv2.imshow('concat', oper_img1)
-        #cv2.imwrite('write.jpg', mark_result)
+        #cv2.imwrite('match.jpg', mark_result)
         # # #cv2.imshow('concat2', image2)
         # cv2.waitKey(0)
         # cv2.destroyAllWindows()
 
-    #result = cv2.imread(os.path.join('data/data2',img_list[0]))#讀取圖片
-
-    #totol_y_shifts=58
+    # #result = cv2.imread(os.path.join('data/data2',img_list[0]))#讀取圖片
+    # #totol_y_shifts=58
 
     #align_img = stitch.end2end_align(result,totol_y_shifts,best_shift_y,best_shift_x)
+    #cv2.imwrite('align_img.jpg', align_img)
 
-    #final = stitch.crop(result)
-    final = result[int(totol_y_shifts)+5:305,:]
+    final = stitch.crop(result)
+    #final = result[int(totol_y_shifts)+5:305,:]
     cv2.imwrite('result.jpg', final)
 
     
