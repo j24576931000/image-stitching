@@ -26,6 +26,8 @@ main執行時會read data folder裡全部的image
 
 1. **Projection**
 
+首先先將每張圖投影成圓柱形的狀態，接著基於公式(1)以及公式(2)，其中 f 為 Focal Length，s 則帶入 f 以盡可能減少失真。轉換時以圖片的中心點設為 x=0, y=0，x 往右為正，y 往上為正，對每個 pixel 套用這樣的公 式進行轉換。轉換完成後使用了 cv2 內建的 boundingRect，並設定好 threshold 後對新的圖片掃描一 次，排除掉圖片中左右邊界的黑色邊框，可是不太清楚是不是因為一開始有先把圖片 resize，所以投 影之後圖有些變形，結果的圖是 resize 成五分之一，繳交的 code 是 resize 成十分之一。 
+
 <div align=center><img src="picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.001.png"/> </div>
 
 <p align="center">公式(1) </p>
@@ -34,7 +36,6 @@ main執行時會read data folder裡全部的image
 
 <p align="center">公式(2) </p>                                                              
 
-首先先將每張圖投影成圓柱形的狀態，接著基於公式(1)以及公式(2)，其中 f 為 Focal Length，s 則帶入 f 以盡可能減少失真。轉換時以圖片的中心點設為 x=0, y=0，x 往右為正，y 往上為正，對每個 pixel 套用這樣的公 式進行轉換。轉換完成後使用了 cv2 內建的 boundingRect，並設定好 threshold 後對新的圖片掃描一 次，排除掉圖片中左右邊界的黑色邊框，可是不太清楚是不是因為一開始有先把圖片 resize，所以投 影之後圖有些變形，結果的圖是 resize 成五分之一，繳交的 code 是 resize 成十分之一。 
 
 2. **Feature detector** 
 
