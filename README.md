@@ -39,17 +39,17 @@ main執行時會read data folder裡全部的image
 
 2. **Feature detector** 
 
-使用 Harris\_corner\_detector 
+    使用 Harris\_corner\_detector 
 
-先將圖片灰階後取 Gaussian 
+    先將圖片灰階後取 Gaussian 
 
-將 GaussianBlur 後的圖分別對 x 方向和 y 方向套用 sobal filter 得到 gradient ( Ix 和 Iy)  Ixx = Ix \* Ix   Iyy = Iy \* Iy   Ixy = Ix \* Iy 
+    將 GaussianBlur 後的圖分別對 x 方向和 y 方向套用 sobal filter 得到 gradient ( Ix 和 Iy)  Ixx = Ix \* Ix   Iyy = Iy \* Iy   Ixy = Ix \* Iy 
 
-對 Ixx  Iyy 和 Ixy 分別在取一次 Gaussian 得到每個點的 2\*2 矩陣 
+    對 Ixx  Iyy 和 Ixy 分別在取一次 Gaussian 得到每個點的 2\*2 矩陣 
 
-依每個 2\*2 矩陣的 det/trace 得到每個點的 corner\_response 
+    依每個 2\*2 矩陣的 det/trace 得到每個點的 corner\_response 
 
-將 每個 10 \*10 kernel 中最大的 corner\_response 的點取出當 feature point 
+    將 每個 10 \*10 kernel 中最大的 corner\_response 的點取出當 feature point 
 
 3. **Feature description**
 
