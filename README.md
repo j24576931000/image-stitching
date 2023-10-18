@@ -93,7 +93,7 @@ main執行時會read data folder裡全部的image
 
 ![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.008.jpeg) ![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.009.jpeg)
 
-` `![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.010.jpeg)![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.011.jpeg)
+![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.010.jpeg)![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.011.jpeg)
 
 ![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.012.jpeg)
 
