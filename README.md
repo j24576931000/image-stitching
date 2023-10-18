@@ -26,11 +26,11 @@ main執行時會read data folder裡全部的image
 
 1. **Projection**
 
-<p align="center">![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.001.png) </p>
+<div align=center>![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.001.png) </div>
 
 <p align="center">圖(1) </p>
        
-<p align="center">![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.002.png) </p>
+<div align=center>![](picture/Aspose.Words.0b80bc36-e9ac-433b-9b0e-de9ffa0b8212.002.png) </div>
 
 <p align="center">圖(2) </p>                                                              
 
